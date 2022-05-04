@@ -9,7 +9,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.plaf.synth.SynthTreeUI;
 
 import org.json.JSONObject;
 
@@ -32,7 +31,10 @@ public class asiakkaat extends HttpServlet {
 		System.out.println("asiakkaat.doGet()");
 		String pathInfo = request.getPathInfo();
 		System.out.println("polku: " + pathInfo);
-		String hakusana = pathInfo.replace("/", "");
+		String hakusana = "";
+		if(pathInfo!=null) {
+			hakusana = pathInfo.replace("/", "");
+		} 
 		Dao dao = new Dao();
 		ArrayList<Asiakas> asiakkaat = dao.listaaKaikki(hakusana);
 		System.out.println(asiakkaat);
@@ -45,6 +47,20 @@ public class asiakkaat extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("asiakkaat.doPost");
+		JSONObject jsonObj = new JsonStrToObj().convert(request);
+		Asiakas asiakas = new Asiakas();
+		asiakas.setEtunimi(jsonObj.getString("etunimi"));
+		asiakas.setSukunimi(jsonObj.getString("sukunimi"));
+		asiakas.setPuhelin(jsonObj.getString("puhelin"));
+		asiakas.setSposti(jsonObj.getString("sposti"));
+		response.setContentType("application/json");
+		PrintWriter out = response.getWriter();
+		Dao dao = new Dao();
+		if(dao.lisaaAsiakas(asiakas)) {
+			out.println("{\"response\":1}");
+		}else {
+			out.println("{\"response\":0}");
+		}
 	}
 
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -55,6 +71,20 @@ public class asiakkaat extends HttpServlet {
 	
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("asiakkaat.doDelete()");
+		String pathInfo = request.getPathInfo();			
+		System.out.println("polku: "+pathInfo);
+		String poistettavaID = pathInfo.replace("/", "");		
+		response.setContentType("application/json");
+		PrintWriter out = response.getWriter();
+		Dao dao = new Dao();			
+		if(dao.poistaAsiakas(poistettavaID)){ //metodi palauttaa true/false
+			out.println("{\"response\":1}");  //Auton poistaminen onnistui {"response":1}
+		}else{
+			out.println("{\"response\":0}");  //Auton poistaminen epäonnistui {"response":0}
+		}	
 	}
 
 }
+
+
+
