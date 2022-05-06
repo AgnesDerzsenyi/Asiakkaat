@@ -6,7 +6,7 @@
 <meta charset="ISO-8859-1">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="css/main.css">
-<title>Autojen listaus</title>
+<title>Asiakkaiden listaus</title>
 </head>
 <body>
 	<table id="listaus">
@@ -58,6 +58,7 @@ function haeTiedot(){
         	htmlStr+="<td>"+field.sukunimi+"</td>";
         	htmlStr+="<td>"+field.puhelin+"</td>";
         	htmlStr+="<td>"+field.sposti+"</td>";  
+        	htmlStr+="<td><a href='muutaasiakas.jsp?asiakas_id="+field.asiakas_id+"'>Muuta</a>&nbsp;";
         	htmlStr+="<td><span class='poista' onclick=poista("+field.asiakas_id+",'"+field.etunimi+"','"+field.sukunimi+"')>Poista</span></td>"; 
         	htmlStr+="</tr>";
         	$("#listaus tbody").append(htmlStr);
