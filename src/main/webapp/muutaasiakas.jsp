@@ -12,7 +12,7 @@
 </head>
 <body>
 <form id="tiedot">
-	<table>
+	<table class="table">
 		<thead>	
 			<tr>
 				<th colspan="5" class="oikealle"><span id="takaisin">Takaisin listaukseen</span></th>
@@ -22,17 +22,18 @@
 				<th>Sukunimi</th>
 				<th>Puhelin</th>
 				<th>Sposti</th>
-				<th></th>
+				<th>Hallinta</th>
 			</tr>
 		</thead>
-		<tbody>
+		
 			<tr>
 				<td><input type="text" name="etunimi" id="etunimi"></td>
 				<td><input type="text" name="sukunimi" id="sukunimi"></td>
 				<td><input type="text" name="puhelin" id="puhelin"></td>
 				<td><input type="text" name="sposti" id="sposti"></td> 
-				<td><input type="submit" id="tallenna" value="Hyväksy"></td>
+				<td><input type="submit" value="Tallenna" id="tallenna"></td>
 			</tr>
+		<tbody>
 		</tbody>
 	</table>
 	<input type="hidden" name="asiakas_id" id="asiakas_id">	
@@ -41,17 +42,21 @@
 </body>
 <script>
 $(document).ready(function(){
+	
 	$("#takaisin").click(function(){
 		document.location="listaaasiakkaat.jsp";
 	});
 	
+	$("#etunimi").focus();
+	
 	var asiakas_id = requestURLParam("asiakas_id"); //Funktio löytyy scripts/main.js 	
 	$.ajax({url:"asiakkaat/haeyksi/"+asiakas_id, type:"GET", dataType:"json", success:function(result){	
-		$("#asiakas_id").val(result.asiakas_id);		
+				
 		$("#etunimi").val(result.etunimi);	
 		$("#sukunimi").val(result.sukunimi);
 		$("#puhelin").val(result.puhelin);
-		$("#sposti").val(result.sposti);			
+		$("#sposti").val(result.sposti);
+		$("#asiakas_id").val(result.asiakas_id);
     }});
 	
 	$("#tiedot").validate({						
